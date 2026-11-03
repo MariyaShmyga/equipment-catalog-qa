@@ -1,0 +1,126 @@
+
+[
+  {
+    "name": "missing_name",
+    "body": {
+      "email": "buyer@example.org",
+      "product_id": 1,
+      "quantity": 2
+    }
+  },
+  {
+    "name": "missing_email",
+    "body": {
+      "name": "Maria Buyer",
+      "product_id": 1,
+      "quantity": 2
+    }
+  },
+  {
+    "name": "missing_product_id",
+    "body": {
+      "name": "Maria Buyer",
+      "email": "buyer@example.org",
+      "quantity": 2
+    }
+  },
+  {
+    "name": "missing_quantity",
+    "body": {
+      "name": "Maria Buyer",
+      "email": "buyer@example.org",
+      "product_id": 1
+    }
+  },
+  {
+    "name": "name_too_short",
+    "body": {
+      "name": "A",
+      "email": "buyer@example.org",
+      "product_id": 1,
+      "quantity": 2
+    }
+  },
+  {
+    "name": "blank_name",
+    "body": {
+      "name": "   ",
+      "email": "buyer@example.org",
+      "product_id": 1,
+      "quantity": 2
+    }
+  },
+  {
+    "name": "null_name",
+    "body": {
+      "name": null,
+      "email": "buyer@example.org",
+      "product_id": 1,
+      "quantity": 2
+    }
+  },
+  {
+    "name": "invalid_email",
+    "body": {
+      "name": "Maria Buyer",
+      "email": "not-an-email",
+      "product_id": 1,
+      "quantity": 2
+    }
+  },
+  {
+    "name": "negative_product_id",
+    "body": {
+      "name": "Maria Buyer",
+      "email": "buyer@example.org",
+      "product_id": -1,
+      "quantity": 2
+    }
+  },
+  {
+    "name": "zero_product_id",
+    "body": {
+      "name": "Maria Buyer",
+      "email": "buyer@example.org",
+      "product_id": 0,
+      "quantity": 2
+    }
+  },
+  {
+    "name": "zero_quantity",
+    "body": {
+      "name": "Maria Buyer",
+      "email": "buyer@example.org",
+      "product_id": 1,
+      "quantity": 0
+    }
+  },
+  {
+    "name": "negative_quantity",
+    "body": {
+      "name": "Maria Buyer",
+      "email": "buyer@example.org",
+      "product_id": 1,
+      "quantity": -5
+    }
+  },
+  {
+    "name": "quantity_exceeds_limit",
+    "body": {
+      "name": "Maria Buyer",
+      "email": "buyer@example.org",
+      "product_id": 1,
+      "quantity": 101
+    }
+  },
+  {
+    "name": "unexpected_field",
+    "body": {
+      "name": "Maria Buyer",
+      "email": "buyer@example.org",
+      "product_id": 1,
+      "quantity": 2,
+      "admin": true
+    }
+  }
+]
