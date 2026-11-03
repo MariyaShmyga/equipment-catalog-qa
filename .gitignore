@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+playwright-report/
+test-results/
+data/
+.env
+.vscode/*.log
+.DS_Store
+*.pyc
+*.sqlite3

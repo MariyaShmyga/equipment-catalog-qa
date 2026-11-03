@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Каталог оборудования — учебный стенд</title>
+  <style>
+    :root { color-scheme: light; --ink:#243046; --muted:#64718a; --line:#dce1e9; --brand:#334b75; --bg:#f5f6f8; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui,-apple-system,Segoe UI,Arial,sans-serif; }
+    .wrap { max-width:1100px; margin:auto; padding:0 22px; }
+    header { background:#fff; border-bottom:1px solid var(--line); padding:24px 0; }
+    header small { color:var(--muted); font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
+    h1 { font-size:clamp(26px,3.6vw,38px); letter-spacing:-.035em; line-height:1.16; margin:12px 0 8px; }
+    h2 { font-size:23px; letter-spacing:-.02em; margin-top:0; }
+    p { margin:8px 0; }
+    .muted { color:var(--muted); }
+    main { padding:30px 0 70px; }
+    .panel { background:#fff; border:1px solid var(--line); border-radius:13px; padding:22px; margin-bottom:24px; }
+    .filters { display:grid; grid-template-columns:2fr 1fr 1fr; gap:16px; align-items:end; }
+    label { display:block; font-weight:600; font-size:13px; margin-bottom:6px; }
+    input,select,textarea,button { font:inherit; }
+    input,select,textarea { display:block; width:100%; padding:11px 12px; border:1px solid #b9c3d1; border-radius:8px; background:#fff; color:var(--ink); }
+    input:focus,select:focus,textarea:focus { outline:2px solid #a9bbdc; outline-offset:1px; }
+    .checkbox { display:flex; align-items:center; gap:8px; margin-top:15px; font-weight:400; }
+    .checkbox input { width:auto; }
+    button { border:1px solid var(--brand); background:var(--brand); color:#fff; padding:10px 16px; border-radius:8px; cursor:pointer; }
+    button:hover:not(:disabled) { background:#243e69; }
+    button:disabled { cursor:not-allowed; opacity:.45; }
+    .secondary { background:#fff; color:var(--brand); }
+    .list-head { display:flex; justify-content:space-between; align-items:baseline; gap:12px; margin:24px 0 12px; }
+    .list-head h2 { margin:0; }
+    .grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+    article { background:#fff; border:1px solid var(--line); border-radius:11px; padding:17px; display:flex; flex-direction:column; min-height:235px; }
+    article h3 { font-size:17px; line-height:1.32; margin:8px 0; }
+    .sku { font:12px ui-monospace,Consolas,monospace; color:var(--muted); }
+    .price { font-size:20px; font-weight:700; margin:12px 0 5px; }
+    .stock { color:#2f795a; font-size:13px; }
+    .stock.empty { color:#9a4848; }
+    .card-footer { margin-top:auto; padding-top:16px; }
+    .card-footer button { width:100%; }
+    .pager { display:flex; justify-content:center; margin:22px 0; }
+    .quote-fields { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
+    .quote-fields .wide { grid-column:1/-1; }
+    form button { margin-top:18px; }
+    [role=status] { min-height:23px; margin-top:12px; }
+    @media (max-width:820px) { .filters { grid-template-columns:1fr 1fr; } .filters>div:first-child { grid-column:1/-1; } .grid { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:560px) { .filters,.quote-fields,.grid { grid-template-columns:1fr; } .filters>div:first-child,.quote-fields .wide { grid-column:auto; } .panel { padding:16px; } }
+  </style>
+</head>
+<body>
+  <header><div class="wrap">
+    <small>Procurement demo / QA practice</small>
+    <h1>Каталог оборудования</h1>
+    <p class="muted">Учебный каталог: товары и цены вымышлены. Данные берутся из локальной SQLite-базы.</p>
+  </div></header>
+  <main class="wrap">
+    <section class="panel" aria-label="Фильтры каталога">
+      <div class="filters">
+        <div><label for="search">Поиск по названию</label><input id="search" data-testid="search" placeholder="Например, Projector"></div>
+        <div><label for="category">Категория</label><select id="category" data-testid="category"><option value="">Все категории</option></select></div>
+        <div><label for="sort">Сортировка</label><select id="sort" data-testid="sort"><option value="name">По названию</option><option value="price_asc">Сначала дешевле</option><option value="price_desc">Сначала дороже</option></select></div>
+      </div>
+      <label class="checkbox"><input type="checkbox" data-testid="in-stock"> Только в наличии</label>
+    </section>
+    <div class="list-head"><h2>Товары</h2><span class="muted" data-testid="result-count" aria-live="polite">Загрузка…</span></div>
+    <section class="grid" data-testid="products" aria-label="Результаты поиска"></section>
+    <p data-testid="catalog-message" role="status"></p>
+    <div class="pager"><button class="secondary" data-testid="load-more" type="button" hidden>Показать ещё</button></div>
+
+    <section class="panel" id="request" aria-label="Запрос предложения">
+      <h2>Запросить предложение</h2>
+      <p class="muted">Форма сохраняет заявку в локальную БД. Реальных сообщений никому не отправляет.</p>
+      <form data-testid="quote-form">
+        <div class="quote-fields">
+          <div><label for="buyer-name">Имя</label><input id="buyer-name" name="name" data-testid="buyer-name" minlength="2" maxlength="60" required></div>
+          <div><label for="buyer-email">Email</label><input id="buyer-email" type="email" name="email" data-testid="buyer-email" required></div>
+          <div><label for="quote-product">Оборудование</label><select id="quote-product" data-testid="quote-product" name="product_id" required><option value="">Выберите товар</option></select></div>
+          <div><label for="quantity">Количество</label><input id="quantity" name="quantity" data-testid="quantity" type="number" min="1" max="100" value="1" required></div>
+          <div class="wide"><label for="comment">Комментарий (необязательно)</label><textarea id="comment" name="comment" data-testid="comment" maxlength="500" rows="3"></textarea></div>
+        </div>
+        <button type="submit" data-testid="submit-quote">Отправить заявку</button>
+        <p role="status" data-testid="quote-status" aria-live="polite"></p>
+      </form>
+    </section>
+  </main>
+  <script>
+    const $ = (id) => document.querySelector(`[data-testid="${id}"]`);
+    let currentOffset = 0;
+    let total = 0;
+    let querySerial = 0;
+    const pageSize = 12;
+    const formatPrice = (value) => new Intl.NumberFormat('ru-RU').format(value) + ' ₽';
+
+    function drawProduct(product) {
+      const card = document.createElement('article');
+      card.dataset.testid = 'product-card';
+      card.dataset.sku = product.sku;
+      const sku = document.createElement('div'); sku.className = 'sku'; sku.textContent = product.sku + ' · ' + product.manufacturer;
+      const title = document.createElement('h3'); title.textContent = product.name;
+      const price = document.createElement('div'); price.className = 'price'; price.textContent = formatPrice(product.price_rub);
+      const stock = document.createElement('div'); stock.className = 'stock' + (product.stock ? '' : ' empty');
+      stock.textContent = product.stock ? 'В наличии: ' + product.stock : 'Под заказ';
+      const footer = document.createElement('div'); footer.className = 'card-footer';
+      const button = document.createElement('button'); button.type = 'button'; button.textContent = 'Выбрать';
+      button.disabled = product.stock === 0;
+      button.addEventListener('click', () => {
+        $('quote-product').value = String(product.id);
+        document.querySelector('#request').scrollIntoView({behavior:'smooth'});
+      });
+      footer.append(button);
+      card.append(sku,title,price,stock,footer);
+      return card;
+    }
+
+    async function loadProducts(append = false) {
+      const serial = ++querySerial;
+      if (!append) { currentOffset = 0; $('products').replaceChildren(); }
+      $('catalog-message').textContent = '';
+      $('load-more').hidden = true;
+      const params = new URLSearchParams({
+        q: $('search').value,
+        category: $('category').value,
+        sort: $('sort').value,
+        limit: String(pageSize),
+        offset: String(currentOffset),
+      });
+      if ($('in-stock').checked) params.set('in_stock', 'true');
+      try {
+        const response = await fetch('/api/products?' + params);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        if (serial !== querySerial) return;
+        total = data.total;
+        for (const product of data.items) $('products').append(drawProduct(product));
+        currentOffset += data.items.length;
+        $('result-count').textContent = `Найдено: ${total}`;
+        $('load-more').hidden = currentOffset >= total;
+        if (total === 0) $('catalog-message').textContent = 'Ничего не найдено';
+      } catch (error) {
+        if (serial !== querySerial) return;
+        $('result-count').textContent = 'Нет данных';
+        $('catalog-message').textContent = 'Не удалось загрузить каталог';
+      }
+    }
+
+    async function loadFiltersAndChoices() {
+      try {
+        const [categories, products] = await Promise.all([
+          fetch('/api/categories').then(r => { if (!r.ok) throw Error(r.status); return r.json(); }),
+          fetch('/api/products?in_stock=true&limit=50').then(r => { if (!r.ok) throw Error(r.status); return r.json(); }),
+        ]);
+        for (const category of categories.items) {
+          const option = new Option(category.title, category.slug);
+          $('category').append(option);
+        }
+        for (const product of products.items) {
+          const option = new Option(`${product.name} (${product.sku})`, product.id);
+          $('quote-product').append(option);
+        }
+      } catch (error) {
+        $('quote-status').textContent = 'Не удалось загрузить список товаров для заявки';
+      }
+    }
+
+    ['search','category','sort','in-stock'].forEach(name => {
+      $(name).addEventListener(name === 'search' ? 'input' : 'change', () => loadProducts());
+    });
+    $('load-more').addEventListener('click', () => loadProducts(true));
+    $('quote-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      $('quote-status').textContent = 'Сохраняем заявку…';
+      const form = event.currentTarget;
+      const payload = {
+        name: form.elements.name.value,
+        email: form.elements.email.value,
+        product_id: Number(form.elements.product_id.value),
+        quantity: Number(form.elements.quantity.value),
+        comment: form.elements.comment.value,
+      };
+      try {
+        const response = await fetch('/api/quotes', {
+          method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+        });
+        const body = await response.json();
+        if (response.ok) {
+          $('quote-status').textContent = 'Заявка №' + body.id + ' сохранена';
+          form.reset();
+        } else {
+          $('quote-status').textContent = body.detail === 'Not enough stock'
+            ? 'Нет нужного количества на складе' : 'Не удалось сохранить заявку';
+        }
+      } catch (error) {
+        $('quote-status').textContent = 'Не удалось связаться с сервером';
+      }
+    });
+    loadFiltersAndChoices();
+    loadProducts();
+  </script>
+</body>
+</html>

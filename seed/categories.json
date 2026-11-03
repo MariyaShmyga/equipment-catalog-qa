@@ -1,0 +1,8 @@
+[
+  {"slug": "lighting", "title": "Свет"},
+  {"slug": "audio", "title": "Звук"},
+  {"slug": "video", "title": "Видео"},
+  {"slug": "network", "title": "Сетевое оборудование"},
+  {"slug": "compute", "title": "Серверы и ПК"},
+  {"slug": "peripherals", "title": "Периферия"}
+]

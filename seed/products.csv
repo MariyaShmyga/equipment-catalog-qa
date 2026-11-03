@@ -1,0 +1,49 @@
+id,sku,name,category_slug,manufacturer,price_rub,stock
+1,LIG-01001,LED Fresnel 150,lighting,VegaLight,17900,10
+2,LIG-01002,Wash Bar 18,lighting,Lumera,22900,17
+3,LIG-01003,Spot 250,lighting,ProBeam,48000,24
+4,LIG-01004,Panel BiColor 600,lighting,Lumera,26400,31
+5,LIG-01005,Beam 230,lighting,ProBeam,66900,38
+6,LIG-01006,RGB Tube 120,lighting,VegaLight,10500,45
+7,LIG-01007,DMX Controller 48,lighting,StageLink,38000,52
+8,LIG-01008,Follow Spot 350,lighting,ProBeam,72900,0
+9,AUD-02001,Wireless Microphone Duo,audio,SoundPro,23500,13
+10,AUD-02002,Studio Monitor 5,audio,Acoustica,32900,20
+11,AUD-02003,Digital Mixer 16,audio,WaveMix,92000,27
+12,AUD-02004,Conference Mic Array,audio,SoundPro,65000,34
+13,AUD-02005,Portable PA 12,audio,WaveMix,44500,41
+14,AUD-02006,Audio Interface 4,audio,Acoustica,18900,48
+15,AUD-02007,Lapel Mic Kit,audio,SoundPro,12900,55
+16,AUD-02008,Stage Subwoofer 18,audio,WaveMix,110000,0
+17,VID-03001,Laser Projector 5000,video,VisioTech,215000,16
+18,VID-03002,LED Display P2.5,video,PixelLine,335000,23
+19,VID-03003,PTZ Camera 20x,video,ViewCam,120000,30
+20,VID-03004,Switcher HDMI 8,video,VisioTech,89500,37
+21,VID-03005,Capture Card 4K,video,ViewCam,27900,44
+22,VID-03006,Motorized Screen 120,video,PixelLine,34900,51
+23,VID-03007,Camera Controller IP,video,ViewCam,65000,58
+24,VID-03008,Video Encoder H265,video,VisioTech,43500,0
+25,NET-04001,Managed Switch 24P,network,NetAxis,54000,19
+26,NET-04002,WiFi Access Point AX,network,AirGrid,18000,26
+27,NET-04003,Router MultiWAN,network,NetAxis,32000,33
+28,NET-04004,PoE Injector 60W,network,AirGrid,4800,40
+29,NET-04005,SFP Module 10G,network,NetAxis,9200,47
+30,NET-04006,Fiber Patch Panel 24,network,OptiLine,14500,54
+31,NET-04007,Firewall Appliance S,network,NetAxis,119000,61
+32,NET-04008,Network Rack 18U,network,OptiLine,39000,0
+33,COM-05001,Rack Server R220,compute,CoreSys,245000,22
+34,COM-05002,Workstation W480,compute,CoreSys,189000,29
+35,COM-05003,Mini PC M12,compute,NovaByte,49500,36
+36,COM-05004,NAS Storage 4Bay,compute,StoreNest,68500,43
+37,COM-05005,SSD Enterprise 2TB,compute,StoreNest,37500,50
+38,COM-05006,GPU Compute Node,compute,CoreSys,640000,57
+39,COM-05007,UPS Rack 3000,compute,PowerLine,97500,64
+40,COM-05008,Thin Client T40,compute,NovaByte,29000,0
+41,PER-06001,Mechanical Keyboard Pro,peripherals,KeyForge,8900,25
+42,PER-06002,Ergonomic Mouse M6,peripherals,KeyForge,5600,32
+43,PER-06003,Dock USB-C 12Port,peripherals,DockHub,15500,39
+44,PER-06004,Monitor 27 QHD,peripherals,PixelLine,38900,46
+45,PER-06005,Webcam 4K,peripherals,ViewCam,18900,53
+46,PER-06006,Headset Office NC,peripherals,SoundPro,11900,60
+47,PER-06007,Label Printer L2,peripherals,PrintWorks,27500,67
+48,PER-06008,Conference Speakerphone,peripherals,SoundPro,25900,0
